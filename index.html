@@ -67,16 +67,32 @@
 
   <!-- Monaco Init -->
   <script>
-    const editor = document.getElementById("editor")
-    let lang = `${editor.innertext}` | "html"
+    const editor = document.getElementsByClassName("tabtext")
+    let lang = "html"
     require.config({ paths: { vs: 'https://unpkg.com/monaco-editor@latest/min/vs' } });
 
     require(['vs/editor/editor.main'], function () {
-      // Initialize Monaco Editor instance
+
+      monaco.editor.defineTheme('Lexius', {
+        base: 'vs-dark',
+        inherit: true,
+        rules: [
+          { token: 'comment', foreground: 'ffa500', fontStyle: 'italic' },
+          { token: 'keyword', foreground: '00ff00' },
+          { token: 'number', foreground: '00ffff' },
+        ],
+        colors: {
+          'editor.background': '#151833', // full black
+          'editorLineNumber.foreground': '#555',
+          'editorLineNumber.activeForeground': '#fff'
+        }
+      });
+
       window.lexiusEditor = monaco.editor.create(document.getElementById('editor'), {
         value: '',
-        language: `${lang}`,
-        theme: 'vs-dark'
+        placeholder: 'type "!" to get a html boilerplate',
+        language: lang,
+        theme: 'Lexius'
       });
 
       // Decorate the selected text
@@ -93,10 +109,9 @@
 
         // Create a decoration object for the selection
         const newDecorations = [{
-          range: selection,  // Highlight the selected range
+          range: selection,
           options: {
-            isWholeLine: false,
-            className: 'highlight-selected',  // Custom class for highlighting
+            inlineClassName: 'highlight-selected',
           }
         }];
 

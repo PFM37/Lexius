@@ -44,10 +44,34 @@ function highlightTab(tabName) {
 }
 
 function Save() {
-    const currentTab = getTabFromQuery();
-    const content = window.lexiusEditor.getValue();
-    const editor = document.getElementById("editor")
-    localStorage.setItem(tabtext, editor.innerText)
+    const code = lexiusEditor.getValue(); // Get code from the editor
+
+    // Get filename from tab (defaults to 'untitled')
+    const filenameElement = document.querySelector('.tabtext');
+    const filename = filenameElement ? filenameElement.innerText.trim() : 'untitled';
+
+    // Determine extension based on Monaco's language (optional, fallback to .txt)
+    const extMap = {
+      html: 'html',
+      javascript: 'js',
+      typescript: 'ts',
+      css: 'css',
+      json: 'json',
+      python: 'py',
+      cpp: 'cpp',
+      c: 'c',
+      java: 'java',
+      plaintext: 'txt'
+    };
+
+    const lang = lexiusEditor.getModel().getLanguageId();
+    const ext = extMap[lang] || 'txt';
+
+    const fullFileName = `${filename}.${ext}`;
+
+    // Create a Blob and save
+    const blob = new Blob([code], { type: 'text/plain;charset=utf-8' });
+    saveAs(blob, fullFileName);
 }
 
 function rota() {
