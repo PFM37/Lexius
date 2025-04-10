@@ -1,10 +1,20 @@
 * {
     padding: 0;
     margin: 0;
-    background: #151833;
     color: white;
     max-width: 100vw;    
 }
+
+body {
+    background: #151833;
+}
+
+::selection {
+    background: #7E57C2;
+    color: white; /* Custom text color */
+}
+
+
 nav {
     display: flex;
     background: #151833;
@@ -46,11 +56,12 @@ nav button {
 }
 
 .tab-icon {
-    width: 15px;
+    width: 30px;
 }
 
 .rename-input {
     max-width: 55px;
+    background-color: transparent;
 }
 
 .ta {
@@ -70,4 +81,8 @@ nav button {
     .ta {
         font-size: 50px;
     }
+}
+
+#editor {
+    color: #151833;
 }

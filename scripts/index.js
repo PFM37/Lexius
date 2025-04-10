@@ -1,3 +1,10 @@
+document.addEventListener("DOMContentLoaded", () => {
+    let text = localStorage.getItem(`${tabtext}`)
+    text = editor.innerText
+}
+
+)
+
 const defaultContent = {
     'index.html': '<!DOCTYPE html>\n<html>\n  <head>\n    <title>Lexius</title>\n  </head>\n  <body>\n    Hello, World!\n  </body>\n</html>',
     'style.css': 'body {\n  background-color: #222;\n  color: white;\n}',
@@ -18,7 +25,7 @@ function setTabInQuery(tabName) {
     loadTab(tabName);
 }
 
-function setLanguageForTab(tabName) {
+async function setLanguageForTab(tabName) {
     const model = window.lexiusEditor.getModel();
     const ext = tabName.split('.').pop();
     let language = 'plaintext';
@@ -39,7 +46,8 @@ function highlightTab(tabName) {
 function Save() {
     const currentTab = getTabFromQuery();
     const content = window.lexiusEditor.getValue();
-    localStorage.setItem(`tab_${currentTab}`, content);
+    const editor = document.getElementById("editor")
+    localStorage.setItem(tabtext, editor.innerText)
 }
 
 function rota() {
@@ -82,7 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     newTabEl.style.cursor = 'pointer';
                     newTabEl.addEventListener('click', () => setTabInQuery(newTab));
                     tab.parentNode.insertBefore(newTabEl, tab);
-                    localStorage.setItem(`tab_${newTab}`, '');
                     setTabInQuery(newTab);
                 }
             } else {
@@ -163,7 +170,7 @@ function rename() {
                 <div style="margin-right: 7px;">${newName}</div>
             `;
             tabs[tabs.indexOf(tabtext)] = newName;
-            setTabInQuery(newName); // Update URL
+            setTabInQuery(newName); 
         } else {
             tab.innerHTML = `
                 <div style="margin-right: 7px;">
@@ -184,11 +191,16 @@ function rename() {
 document.querySelector('.tab.active-tab').addEventListener('dblclick', rename); // Trigger rename on double-click
 
 const tab_icon = document.getElementsByClassName("tab-icon")[0]
+const tabtext = document.getElementsByClassName("tabtext")[0].innerText
 
-if (tabtext.endsWith("py")) {
-    tab_icon.src = "https://static-00.iconduck.com/assets.00/python-icon-512x509-pyuo2h5v.png"
+function icons() {
+    if (tabtext.endsWith(".py")) {
+        return tab_icon.src = "https://static-00.iconduck.com/assets.00/python-icon-512x509-pyuo2h5v.png"
+    }
+    
+    else {
+        return tab_icon.src = "res/images/default.ico"
+    }
 }
 
-else {
-    tab_icon.src = ""
-}
+setInterval(icons(), 1000);
