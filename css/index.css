@@ -49,6 +49,10 @@ nav button {
     width: 15px;
 }
 
+.rename-input {
+    max-width: 55px;
+}
+
 .ta {
     margin-top: 0;
     margin-left: 5px;

@@ -18,8 +18,6 @@ function setTabInQuery(tabName) {
     loadTab(tabName);
 }
 
-https://didactic-giggle-wr5rgrxjvvjrhv64q.github.dev/
-
 function setLanguageForTab(tabName) {
     const model = window.lexiusEditor.getModel();
     const ext = tabName.split('.').pop();
@@ -51,7 +49,6 @@ function rota() {
     void runBtn.offsetWidth;                // Trigger reflow
     runBtn.style.animation = 'rot 2s ease-in-out';
 }
-
 
 function run() {
     Save();
@@ -142,9 +139,56 @@ monaco.languages.registerCompletionItemProvider('html', {
     }
   });
 
-  const tab = document.getElementsByClassName("tab")[0]
-  const tab_icon = document.getElementsByClassName("tab-icon")[0]
+function rename() {
+    const tab = document.querySelector('.tab');
+    const tabtext = tab.innerText
 
-if (tab.innerText.endsWith("py")) {
-    tab_icon.src = "https://static-00.iconduck.com/assets.00/file-type-python-icon-512x508-7x4y03b1.png"
+    tab.innerHTML = `
+        <div style="margin-right: 7px;">
+          <img src="" alt="" class="tab-icon">
+        </div>
+        <div style="margin-right: 7px;">
+          <input class="rename-input" type="text" placeholder="${tabtext}" value="${tabtext}" autofocus>
+        </div>
+    `;
+    
+    const input = tab.querySelector('input');
+    input.addEventListener('blur', () => {
+        const newName = input.value.trim();
+        if (newName && newName !== tabtext) {
+            tab.innerHTML = `
+                <div style="margin-right: 7px;">
+                  <img src="" alt="" class="tab-icon">
+                </div>
+                <div style="margin-right: 7px;">${newName}</div>
+            `;
+            tabs[tabs.indexOf(tabtext)] = newName;
+            setTabInQuery(newName); // Update URL
+        } else {
+            tab.innerHTML = `
+                <div style="margin-right: 7px;">
+                  <img src="" alt="" class="tab-icon">
+                </div>
+                <div style="margin-right: 7px;">${tabtext}</div>
+            `;
+        }
+    });
+
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            input.blur(); // Trigger blur event
+        }
+    });
+}
+
+document.querySelector('.tab.active-tab').addEventListener('dblclick', rename); // Trigger rename on double-click
+
+const tab_icon = document.getElementsByClassName("tab-icon")[0]
+
+if (tabtext.endsWith("py")) {
+    tab_icon.src = "https://static-00.iconduck.com/assets.00/python-icon-512x509-pyuo2h5v.png"
+}
+
+else {
+    tab_icon.src = ""
 }
