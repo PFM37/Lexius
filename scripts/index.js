@@ -1,9 +1,9 @@
-const ta = document.getElementsByClassName("ta")[0];
 const defaultContent = {
     'index.html': '<!DOCTYPE html>\n<html>\n  <head>\n    <title>Lexius</title>\n  </head>\n  <body>\n    Hello, World!\n  </body>\n</html>',
     'style.css': 'body {\n  background-color: #222;\n  color: white;\n}',
     'script.js': 'console.log("Lexius is running!");'
 };
+
 const tabs = ['index.html', 'style.css', 'script.js'];
 
 function getTabFromQuery() {
@@ -18,13 +18,18 @@ function setTabInQuery(tabName) {
     loadTab(tabName);
 }
 
-function loadTab(tabName) {
-    let content = localStorage.getItem(`tab_${tabName}`);
-    if (!content && defaultContent[tabName]) {
-        content = defaultContent[tabName];
-    }
-    ta.value = content || '';
-    highlightTab(tabName);
+https://didactic-giggle-wr5rgrxjvvjrhv64q.github.dev/
+
+function setLanguageForTab(tabName) {
+    const model = window.lexiusEditor.getModel();
+    const ext = tabName.split('.').pop();
+    let language = 'plaintext';
+
+    if (ext === 'html') language = 'html';
+    else if (ext === 'css') language = 'css';
+    else if (ext === 'js') language = 'javascript';
+
+    monaco.editor.setModelLanguage(model, language);
 }
 
 function highlightTab(tabName) {
@@ -35,25 +40,38 @@ function highlightTab(tabName) {
 
 function Save() {
     const currentTab = getTabFromQuery();
-    localStorage.setItem(`tab_${currentTab}`, ta.value);
+    const content = window.lexiusEditor.getValue();
+    localStorage.setItem(`tab_${currentTab}`, content);
 }
 
 function rota() {
     run();
-    document.getElementsByClassName("run")[0].style.animation = 'rot ease-in-out 2s';
+    const runBtn = document.getElementsByClassName("run")[0];
+    runBtn.style.animation = 'none';        // Reset
+    void runBtn.offsetWidth;                // Trigger reflow
+    runBtn.style.animation = 'rot 2s ease-in-out';
 }
+
 
 function run() {
     Save();
     const currentTab = getTabFromQuery();
-    const blob = new Blob([ta.value], { type: "text/html;charset=utf-8" });
+    const content = window.lexiusEditor.getValue();
+    const type = currentTab.endsWith('.html') ? 'text/html' :
+                 currentTab.endsWith('.css') ? 'text/css' :
+                 currentTab.endsWith('.js') ? 'application/javascript' :
+                 'text/plain';
+
+    const blob = new Blob([content], { type: type + ";charset=utf-8" });
     saveAs(blob, currentTab);
-    const url = URL.createObjectURL(blob);
-    window.location.href = url;
+
+    if (type === 'text/html') {
+        const url = URL.createObjectURL(blob);
+        window.location.href = url;
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Add event listeners to existing tabs
     document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', () => {
             const tabName = tab.textContent;
@@ -76,5 +94,51 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    loadTab(getTabFromQuery());
+    // Wait until Monaco is loaded
+    const waitForMonaco = setInterval(() => {
+        if (window.lexiusEditor) {
+            clearInterval(waitForMonaco);
+            loadTab(getTabFromQuery());
+        }
+    }, 100);
 });
+
+monaco.languages.registerCompletionItemProvider('html', {
+    triggerCharacters: ['!'],
+    provideCompletionItems: (model, position) => {
+      const word = model.getWordUntilPosition(position);
+      const range = {
+        startLineNumber: position.lineNumber,
+        endLineNumber: position.lineNumber,
+        startColumn: word.startColumn - 1,  // 👈 removes the `!`
+        endColumn: word.endColumn,
+      };
+  
+      return {
+        suggestions: [
+          {
+            label: '!',
+            kind: monaco.languages.CompletionItemKind.Snippet,
+            insertText: [
+              '<!DOCTYPE html>',
+              '<html lang="en">',
+              '<head>',
+              '  <meta charset="UTF-8">',
+              '  <meta name="viewport" content="width=device-width, initial-scale=1.0">',
+              '  <title>${1:Document}</title>',
+              '</head>',
+              '<body>',
+              '  $0',
+              '</body>',
+              '</html>',
+            ].join('\n'),
+            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+            range: range,  // 👈 ensures it replaces the `!`
+            documentation: 'HTML5 Boilerplate',
+            sortText: '0',
+          }
+        ]
+      };
+    }
+  });
+  
