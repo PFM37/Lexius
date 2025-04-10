@@ -141,4 +141,10 @@ monaco.languages.registerCompletionItemProvider('html', {
       };
     }
   });
-  
+
+  const tab = document.getElementsByClassName("tab")[0]
+  const tab_icon = document.getElementsByClassName("tab-icon")[0]
+
+if (tab.innerText.endsWith("py")) {
+    tab_icon.src = "https://static-00.iconduck.com/assets.00/file-type-python-icon-512x508-7x4y03b1.png"
+}

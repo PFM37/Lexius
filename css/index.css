@@ -45,6 +45,10 @@ nav button {
     transform: rotate(90deg);
 }
 
+.tab-icon {
+    width: 15px;
+}
+
 .ta {
     margin-top: 0;
     margin-left: 5px;
