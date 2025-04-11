@@ -84,5 +84,11 @@ nav button {
 }
 
 #editor {
-    color: #151833;
+    color: #5e35d5;
+}
+
+@media (min-width: 320px) {
+    #editor {
+        width: 455px;
+    }
 }
