@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=MuseoModerno:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "MuseoModerno", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+body {
+    background-color: #222;
+}
+
+#editor {
+    height: 95vh;
+    max-width: 90%;
+    right: 0;
+    margin-right: 0;
+    margin-left: 10%;
+    height: 100vh;
+
+}
+
+.side-bar {
+    position: absolute;
+    z-index: 999999999999999999999999999999999999999999999999999999999999999999999999;
+    left: 0;
+    top: 5%;
+    height: 95vh;
+    background-color: rgb(43, 43, 43); /* optional for visibility*/
+    padding: 1rem; /* optional for inner spacing */
+    box-shadow: -2px 0 5px rgba(43, 43, 43, 0.5); /* optional shadow effect */
+    height: 100vh;
+}
+
+.file-a {
+    position: absolute;
+    z-index: 999999999999999999999999999999999999999999999999999999999999999999999999;
+    left: 5%;
+    top: 0;
+    width: 1%;
+    background-color: rgb(33, 33, 33); /* optional for visibility*/
+    padding: 1rem; /* optional for inner spacing */
+    box-shadow: -2px 0 5px rgba(43, 43, 43, 0.5); /* optional shadow effect */
+}
+
+.file-btn {
+    background-color: #0000;
+    border: none;
+    outline: none;
+}

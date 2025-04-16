@@ -118,45 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
-monaco.languages.registerCompletionItemProvider('html', {
-    triggerCharacters: ['!'],
-    provideCompletionItems: (model, position) => {
-      const word = model.getWordUntilPosition(position);
-      const range = {
-        startLineNumber: position.lineNumber,
-        endLineNumber: position.lineNumber,
-        startColumn: word.startColumn - 1,  // 👈 removes the `!`
-        endColumn: word.endColumn,
-      };
-  
-      return {
-        suggestions: [
-          {
-            label: '!',
-            kind: monaco.languages.CompletionItemKind.Snippet,
-            insertText: [
-              '<!DOCTYPE html>',
-              '<html lang="en">',
-              '<head>',
-              '  <meta charset="UTF-8">',
-              '  <meta name="viewport" content="width=device-width, initial-scale=1.0">',
-              '  <title>${1:Document}</title>',
-              '</head>',
-              '<body>',
-              '  $0',
-              '</body>',
-              '</html>',
-            ].join('\n'),
-            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-            range: range,  // 👈 ensures it replaces the `!`
-            documentation: 'HTML5 Boilerplate',
-            sortText: '0',
-          }
-        ]
-      };
-    }
-  });
-
 function rename() {
     const tab = document.querySelector('.tab');
     const tabtext = tab.innerText

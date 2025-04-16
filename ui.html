@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="res/logo/logo.svg" type="image/x-icon">
+    <title>Lexius</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Monaco Editor -->
+    <script src="https://unpkg.com/monaco-editor@latest/min/vs/loader.js"></script>
+  
+    <!-- FileSaver -->
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+</head>
+<body style="max-height: 100vh;">
+    <div class="top-bar">
+        <img src="res/logo/logo.svg" alt="">
+    </div>
+    <div style="max-height: 100vh;">
+        <div class="side-bar">
+            <div class="file">
+                <button class="file-btn" data-active="false"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="000"><path d="M17.5 0h-9L7 1.5V6H2.5L1 7.5v15.07L2.5 24h12.07L16 22.57V18h4.7l1.3-1.43V4.5L17.5 0zm0 2.12l2.38 2.38H17.5V2.12zm-3 20.38h-12v-15H7v9.07L8.5 18h6v4.5zm6-6h-12v-15H16V6h4.5v10.5z"/></svg></button>
+            </div>
+        </div>
+        <div class="file-a">
+            
+        </div>
+        <div class="te" style="max-height: 100vh;">
+            <div id="editor"></div>
+        </div>
+    </div>
+      <!-- Monaco Init -->
+  <script src="scripts/html.js"></script>
+  <script src="scripts/index.js"></script>
+</body>
+</html>
