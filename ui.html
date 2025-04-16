@@ -33,5 +33,49 @@
       <!-- Monaco Init -->
   <script src="scripts/html.js"></script>
   <script src="scripts/index.js"></script>
+  <script src="https://unpkg.com/emmet-codemirror/dist/emmet-codemirror.min.js"></script>
+<script>
+  monaco.languages.registerCompletionItemProvider('html', {
+  triggerCharacters: ['!'],
+  provideCompletionItems: function(model, position) {
+    const lineContent = model.getLineContent(position.lineNumber).slice(0, position.column - 1).trim();
+
+    // Only trigger if the line is just "!"
+    if (lineContent === '!') {
+      return {
+        suggestions: [{
+          label: 'HTML5 Boilerplate',
+          kind: monaco.languages.CompletionItemKind.Snippet,
+          insertText: [
+            '<!DOCTYPE html>',
+            '<html lang="en">',
+            '<head>',
+            '  <meta charset="UTF-8">',
+            '  <meta name="viewport" content="width=device-width, initial-scale=1.0">',
+            '  <title>Document</title>',
+            '</head>',
+            '<body>',
+            '',
+            '</body>',
+            '</html>'
+          ].join('\n'),
+          insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          documentation: 'HTML5 Boilerplate',
+          range: {
+            startLineNumber: position.lineNumber,
+            startColumn: position.column - 1,
+            endLineNumber: position.lineNumber,
+            endColumn: position.column
+          }
+        }]
+      };
+    }
+
+    return { suggestions: [] };
+  }
+});
+
+
+</script>
 </body>
 </html>
