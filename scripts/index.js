@@ -1,3 +1,5 @@
+load()
+
 document.addEventListener("DOMContentLoaded", () => {
     let text = localStorage.getItem(`${tabtext}`)
     text = editor.innerText
@@ -12,6 +14,11 @@ const defaultContent = {
 };
 
 const tabs = ['index.html', 'style.css', 'script.js'];
+
+function load() {
+    let cod = localStorage.getItem("code");
+    lexiusEditor.setValue(cod); // Assuming lexiusEditor is the Monaco editor instance
+}
 
 function getTabFromQuery() {
     const params = new URLSearchParams(window.location.search);
@@ -45,33 +52,13 @@ function highlightTab(tabName) {
 
 function Save() {
     const code = lexiusEditor.getValue(); // Get code from the editor
-
-    // Get filename from tab (defaults to 'untitled')
-    const filenameElement = document.querySelector('.tabtext');
-    const filename = filenameElement ? filenameElement.innerText.trim() : 'untitled';
-
-    // Determine extension based on Monaco's language (optional, fallback to .txt)
-    const extMap = {
-      html: 'html',
-      javascript: 'js',
-      typescript: 'ts',
-      css: 'css',
-      json: 'json',
-      python: 'py',
-      cpp: 'cpp',
-      c: 'c',
-      java: 'java',
-      plaintext: 'txt'
-    };
-
-    const lang = lexiusEditor.getModel().getLanguageId();
-    const ext = extMap[lang] || 'txt';
-
-    const fullFileName = `${filename}.${ext}`;
-
-    // Create a Blob and save
-    const blob = new Blob([code], { type: 'text/plain;charset=utf-8' });
-    saveAs(blob, fullFileName);
+    if (!localStorage.getItem("code")) {
+        localStorage.setItem("code", code)
+    }
+    else {
+        localStorage.clear("code")
+        localStorage.setItem("code", code)
+    }
 }
 
 function rota() {
@@ -215,16 +202,44 @@ function rename() {
 document.querySelector('.tab.active-tab').addEventListener('dblclick', rename); // Trigger rename on double-click
 
 const tab_icon = document.getElementsByClassName("tab-icon")[0]
-const tabtext = document.getElementsByClassName("tabtext")[0].innerText
+const tabtext1 = document.getElementsByClassName("tabtext")[0].innerText
+const tabtext2 = document.getElementsByClassName("tabtext")[0].innerHTML
 
 function icons() {
-    if (tabtext.endsWith(".py")) {
+    if (tabtext2.endsWith(".py")) {
         return tab_icon.src = "https://static-00.iconduck.com/assets.00/python-icon-512x509-pyuo2h5v.png"
     }
     
     else {
-        return tab_icon.src = "res/images/default.ico"
+        return tab_icon.src = "res/images/default.ico";
     }
 }
 
-setInterval(icons(), 1000);
+function updateEditorFontSize() {
+    let fontSize = 14; // default
+
+    const width = window.innerWidth;
+
+    if (width < 480) {
+        fontSize = 999999;
+    } else if (width < 768) {
+        fontSize = 18;
+    } else if (width < 1024) {
+        fontSize = 20;
+    } else {
+        fontSize = 999999;
+    }
+
+    if (window.lexiusEditor) {
+        window.lexiusEditor.updateOptions({ fontSize });
+    }
+}
+
+// Run on page load
+window.addEventListener('DOMContentLoaded', updateEditorFontSize);
+
+// Run on window resize
+window.addEventListener('resize', updateEditorFontSize);
+
+setInterval(icons, 1000);
+setInterval(Save, 5000);

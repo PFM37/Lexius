@@ -89,6 +89,6 @@ nav button {
 
 @media (min-width: 320px) {
     #editor {
-        width: 455px;
+        font-size: xx-large;
     }
 }
